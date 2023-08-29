@@ -137,7 +137,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     mod_state = get_mods();
     switch (keycode) {
         case K_BLE:
-            SEND_STRING("ble");
+            if (record->event.pressed) {
+                SEND_STRING("ble");
+            }
             return false;
         case K_UML_A:
             if (record->event.pressed) {
@@ -258,7 +260,7 @@ bool rgb_matrix_indicators_user(void) {
             }
             break;
     }
-    
+
     return false;
 }
 
