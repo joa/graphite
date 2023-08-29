@@ -15,8 +15,8 @@ You can also find an Oryx-friendly version [here](https://configure.zsa.io/moonl
 ⇑ C ⇑ ← →          ↑ ↓ [ ] ⇑
       
         ⇧ ⌥    📷 ␣
-         ⋆       ⏎
-          ↤      ⇄    
+         ↤       ⏎
+          ⋆     ⇄    
 ```
 
 The magic key `⋆` is reachable from the left thumb. The following combinations are implemented:
