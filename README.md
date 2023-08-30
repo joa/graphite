@@ -21,18 +21,24 @@ You can also find an Oryx-friendly version [here](https://configure.zsa.io/moonl
 
 The magic key `⋆` is reachable from the left thumb. The following combinations are implemented:
 
-| Combo | Result |
-| ----- | ------ |
-| `r⋆`  | `rl`   |
-| `g⋆`  | `gs`   |
-| `u⋆`  | `ue`   |
-| `s⋆`  | `sc`   |
-| `h⋆`  | `hy`   |
-| `w⋆`  | `ws`   |
-| `o⋆`  | `oa`   |
-| `y⋆`  | `y'`   |
-| `p⋆`  | `ph`   |
-| `e⋆`  | `eu`   |
-| `j⋆`  | `ji`   |
+| Combo  | Result   |
+| ------ | -------- |
+| `r⋆`   | `rl`     |
+| `g⋆`   | `gs`     |
+| `u⋆`   | `ue`     |
+| `s⋆`   | `sc`     |
+| `h⋆`   | `hy`     |
+| `w⋆`   | `ws`     |
+| `o⋆`   | `oa`     |
+| `y⋆`   | `y'`     |
+| `p⋆`   | `ph`     |
+| `e⋆`   | `eu`     |
+| `j⋆`   | `just`   |
+| `b⋆`   | `before` |
+| `m⋆`   | `ment`   |
+| `n⋆`   | `nion`   |
+| `t⋆`   | `tment`  |
+| `q⋆`   | `quen`   |
+| ` ⋆`   | ` the`   |
 
 If you press `o` for example and then `⋆` you'll get `oa` as a result. Normally you'd have to do some acrobatics or press first `o` with your right middle-finger and then `a` with the same finger (hence the term SFB or same-finger-bigram).

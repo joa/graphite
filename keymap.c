@@ -27,7 +27,7 @@
 #define K_SRNSHT SGUI(KC_S)
 #define K_MAGIC QK_AREP
 
-enum custom_keycodes { K_UML_A = SAFE_RANGE, K_UML_O, K_UML_U, K_UML_S, K_EURO, K_BLE };
+enum custom_keycodes { K_UML_A = SAFE_RANGE, K_UML_O, K_UML_U, K_UML_S, K_EURO, K_BLE, MG_THE, MG_EFORE, MG_UST, MG_ENT, MG_MENT, MG_UEN, MG_ION };
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -82,7 +82,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______, KC_HASH, KC_DLR , KC_LPRN, KC_RPRN, KC_GRV , _______,        _______, KC_UNDS, KC_MINS, KC_PLUS, KC_ASTR, KC_SCLN, KC_QUOT, 
     _______, _______, KC_CIRC, KC_LBRC, KC_RBRC, KC_TILD,                          _______, _______, _______, _______, KC_BSLS, _______,
     _______, KC_COMM, _______, KC_HOME, KC_END ,          _______,        _______,          KC_PGUP, KC_PGDN, _______, _______, _______, 
-                                  _______, LCTL(KC_BSPC), _______,        _______, _______, _______
+                                  _______, LCTL(KC_BSPC), KC_LGUI,        _______, _______, _______
   ),
 
   [L_NUMPAD] = LAYOUT_moonlander(
@@ -102,33 +102,56 @@ void keyboard_post_init_user(void) {
     rgb_matrix_enable();
 }
 
+// clang-format off
 uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
     switch (keycode) {
-        case KC_R:
-            return KC_L;
-        case KC_G:
-            return KC_S;
-        case KC_U:
-            return KC_E;
-        case KC_S:
-            return KC_C;
-        case KC_H:
-            return KC_Y;
-        case KC_W:
-            return KC_S;
-        case KC_O:
-            return KC_A;
-        case KC_Y:
-            return KC_QUOT;
-        case KC_P:
-            return KC_H;
-        case KC_E:
-            return KC_U;
-        case KC_J:
-            return KC_I;
+        case KC_B: return MG_EFORE;
+        case KC_E: return KC_U;
+        case KC_G: return KC_S;
+        case KC_H: return KC_Y;
+        case KC_J: return MG_UST;
+        case KC_M: return MG_ENT;
+        case KC_N: return MG_ION;
+        case KC_O: return KC_A;
+        case KC_P: return KC_H;
+        case KC_Q: return MG_UEN;
+        case KC_R: return KC_L;
+        case KC_S: return KC_C;
+        case KC_T: return MG_MENT;
+        case KC_U: return KC_E;
+        case KC_W: return KC_S;
+        case KC_Y: return KC_QUOT;
     }
 
-    return KC_TRNS;
+    return MG_THE;
+}
+// clang-format on
+
+#define SEND_MAGIC(x)            \
+    if (record->event.pressed) { \
+        SEND_STRING(x);          \
+    }                            \
+    return false;
+
+bool process_record_magic(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case MG_THE:
+            SEND_MAGIC("the");
+        case MG_EFORE:
+            SEND_MAGIC("efore");
+        case MG_UST:
+            SEND_MAGIC("ust");
+        case MG_ENT:
+            SEND_MAGIC("ent");
+        case MG_MENT:
+            SEND_MAGIC("ment");
+        case MG_ION:
+            SEND_MAGIC("ion");
+        case MG_UEN:
+            SEND_MAGIC("uen");
+    }
+
+    return true;
 }
 
 uint8_t mod_state = 0;
@@ -200,6 +223,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 }
             }
             return false;
+    }
+
+    if (!process_record_magic(keycode, record)) {
+        return false;
     }
 
     return true;
