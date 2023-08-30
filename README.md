@@ -47,4 +47,4 @@ The following magic combos are implemented:
 | `y⋆`   | `y'`     |
 | ` ⋆`   | ` the`   |
 
-If you press `o` for example and then `⋆` you'll get `oa` as a result. Normally you'd have to do some acrobatics or press first `o` with your right middle-finger and then `a` with the same finger (hence the term SFB or same-finger-bigram).
+If you press `o` for example and then `⋆` you'll get `oa` as a result. Normally you'd have to do some acrobatics or press first `o` with your right middle-finger and then `a` with the same finger (hence the term SFB or same-finger-bigram). If you were to type a word like `adjustment` you can simply type `adj⋆m⋆` instead 🤯. `mention` becomes `m⋆i⋆` and so on.
