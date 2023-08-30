@@ -5,7 +5,7 @@
 QMK implementation of the [Graphite layout](https://github.com/rdavison/graphite-layout) for the [Moonlander](https://www.zsa.io/moonlander/) keyboard.
 
 Includes a _magic key_ similar to [Magic Sturdy](https://github.com/Ikcelaks/keyboard_layouts/blob/main/magic_sturdy/magic_sturdy.md) to combat SFBs
-as well as some hacks to support German Umlauts on an US layout.
+as well as some hacks to support German Umlauts on a US layout.
 
 You can also find an Oryx-friendly version [here](https://configure.zsa.io/moonlander/layouts/GLeeV/latest/0/intro).
 
