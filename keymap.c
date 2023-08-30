@@ -28,7 +28,7 @@
 #define K_ENT LT(L_SYMBOL, KC_ENT)
 #define K_MAGIC LSFT_T(QK_AREP)
 
-enum custom_keycodes { K_UML_A = SAFE_RANGE, K_UML_O, K_UML_U, K_UML_S, K_EURO, K_BLE, MG_THE, MG_EFORE, MG_UST, MG_ENT, MG_MENT, MG_UEN, MG_ION };
+enum custom_keycodes { K_UML_A = SAFE_RANGE, K_UML_O, K_UML_U, K_UML_S, K_EURO, K_BLE, MG_THE, MG_EFORE, MG_UST, MG_ENT, MG_MENT, MG_UEN, MG_ION, MG_ON };
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -110,6 +110,7 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
         case KC_E: return KC_U;
         case KC_G: return KC_S;
         case KC_H: return KC_Y;
+        case KC_I: return MG_ON;
         case KC_J: return MG_UST;
         case KC_M: return MG_ENT;
         case KC_N: return MG_ION;
@@ -150,6 +151,8 @@ bool process_record_magic(uint16_t keycode, keyrecord_t *record) {
             SEND_MAGIC("ion");
         case MG_UEN:
             SEND_MAGIC("uen");
+        case MG_ON:
+            SEND_MAGIC("on");
     }
 
     return true;

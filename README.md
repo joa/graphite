@@ -1,5 +1,7 @@
 ### Moonlander Graphite 🚀
 
+![Graphite Layout](layout.png)
+
 QMK implementation of the [Graphite layout](https://github.com/rdavison/graphite-layout) for the [Moonlander](https://www.zsa.io/moonlander/) keyboard.
 
 Includes a _magic key_ similar to [Magic Sturdy](https://github.com/Ikcelaks/keyboard_layouts/blob/main/magic_sturdy/magic_sturdy.md) to combat SFBs
@@ -14,31 +16,34 @@ You can also find an Oryx-friendly version [here](https://configure.zsa.io/moonl
 ⇄ q x m c v        k p , . / ⇑
 ⇑ C ⇑ ← →          ↑ ↓ [ ] ⇑
       
-        ⇧ ⌥    📷 ␣
+        ⋆ ⌥    📷 ␣
          ↤       ⏎
-          ⋆     ⇄    
+          🪟    ⇄    
 ```
 
-The magic key `⋆` is reachable from the left thumb. The following combinations are implemented:
+The magic key `⋆` is reachable from the left thumb. Press it for magic. Hold it for shift.
+
+The following magic combos are implemented:
 
 | Combo  | Result   |
 | ------ | -------- |
-| `r⋆`   | `rl`     |
-| `g⋆`   | `gs`     |
-| `u⋆`   | `ue`     |
-| `s⋆`   | `sc`     |
-| `h⋆`   | `hy`     |
-| `w⋆`   | `ws`     |
-| `o⋆`   | `oa`     |
-| `y⋆`   | `y'`     |
-| `p⋆`   | `ph`     |
-| `e⋆`   | `eu`     |
-| `j⋆`   | `just`   |
 | `b⋆`   | `before` |
+| `e⋆`   | `eu`     |
+| `g⋆`   | `gs`     |
+| `h⋆`   | `hy`     |
+| `i⋆`   | `ion`    |
+| `j⋆`   | `just`   |
 | `m⋆`   | `ment`   |
 | `n⋆`   | `nion`   |
-| `t⋆`   | `tment`  |
+| `o⋆`   | `oa`     |
+| `p⋆`   | `ph`     |
 | `q⋆`   | `quen`   |
+| `r⋆`   | `rl`     |
+| `s⋆`   | `sc`     |
+| `t⋆`   | `tment`  |
+| `u⋆`   | `ue`     |
+| `w⋆`   | `ws`     |
+| `y⋆`   | `y'`     |
 | ` ⋆`   | ` the`   |
 
 If you press `o` for example and then `⋆` you'll get `oa` as a result. Normally you'd have to do some acrobatics or press first `o` with your right middle-finger and then `a` with the same finger (hence the term SFB or same-finger-bigram).
