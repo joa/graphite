@@ -108,6 +108,7 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
     switch (keycode) {
         case KC_B: return MG_EFORE;
         case KC_E: return KC_U;
+        case KC_F: return KC_Y;
         case KC_G: return KC_S;
         case KC_H: return KC_Y;
         case KC_I: return MG_ON;

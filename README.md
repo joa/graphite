@@ -29,6 +29,7 @@ The following magic combos are implemented:
 | ------ | -------- |
 | `b⋆`   | `before` |
 | `e⋆`   | `eu`     |
+| `f⋆`   | `fy`     |
 | `g⋆`   | `gs`     |
 | `h⋆`   | `hy`     |
 | `i⋆`   | `ion`    |
