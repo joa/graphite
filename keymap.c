@@ -25,7 +25,8 @@
 #define K_GUI_QUOT LGUI_T(KC_QUOT)
 #define K_ALTSPC LALT_T(KC_SPC)
 #define K_SRNSHT SGUI(KC_S)
-#define K_MAGIC QK_AREP
+#define K_ENT LT(L_SYMBOL, KC_ENT)
+#define K_MAGIC LSFT_T(QK_AREP)
 
 enum custom_keycodes { K_UML_A = SAFE_RANGE, K_UML_O, K_UML_U, K_UML_S, K_EURO, K_BLE, MG_THE, MG_EFORE, MG_UST, MG_ENT, MG_MENT, MG_UEN, MG_ION };
 
@@ -37,7 +38,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     K_DEL_WORD, KC_N     , KC_R   , KC_T   , KC_S   , KC_G, K_L_UML,        K_BLE  , KC_Y   , KC_H   , KC_A   , KC_E      , KC_I      , K_GUI_SCLN, 
     KC_TAB    , K_CTL_Q  , KC_X   , KC_M   , KC_C   , KC_V,                          KC_K   , KC_P   , KC_COMM, KC_DOT    , K_CTL_SLSH, K_L_MED   , 
     K_L_SYM   , K_CTL_OSM, K_L_NUM, KC_LEFT, KC_RGHT,       K_ALTSPC,       K_SRNSHT,         KC_UP  , KC_DOWN, KC_LBRC   , KC_RBRC   , K_L_SYM   ,
-                                          KC_LSFT, KC_BSPC, K_MAGIC ,       KC_TAB  , KC_ENT, KC_SPC
+                                           K_MAGIC, KC_BSPC, KC_LGUI,       KC_TAB  , K_ENT , KC_SPC
   ),
 
   [L_QWERTY] = LAYOUT_moonlander(
@@ -154,11 +155,31 @@ bool process_record_magic(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-uint8_t mod_state = 0;
+bool remember_last_key_user(uint16_t keycode, keyrecord_t *record, uint8_t *remembered_mods) {
+    return keycode != K_MAGIC; // must not remember the magic key itself
+}
+
+uint8_t mod_state    = 0;
+bool    release_lsft = false;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     mod_state = get_mods();
     switch (keycode) {
+        case K_MAGIC:
+            if (record->tap.count && record->event.pressed) {
+                // can't send the quantuum key so we do this manually
+                if (get_repeat_key_count()) {
+                    return true;
+                }
+                alt_repeat_key_invoke(&record->event);
+            } else if (record->event.pressed) {
+                register_code16(KC_LSFT);
+                release_lsft = true;
+            } else if (release_lsft) {
+                unregister_code16(KC_LSFT);
+                release_lsft = false;
+            }
+            return false;
         case K_BLE:
             if (record->event.pressed) {
                 SEND_STRING("ble");
