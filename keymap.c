@@ -28,17 +28,49 @@
 #define K_ENT LT(L_SYMBOL, KC_ENT)
 #define K_MAGIC LSFT_T(QK_AREP)
 
-enum custom_keycodes { K_UML_A = SAFE_RANGE, K_UML_O, K_UML_U, K_UML_S, K_EURO, K_BLE, MG_THE, MG_EFORE, MG_UST, MG_ENT, MG_MENT, MG_UEN, MG_ION, MG_ON };
+
+enum tap_dance {
+    TD_LBRC_ENTER,
+};
+
+tap_dance_action_t tap_dance_actions[] = {
+    [TD_LBRC_ENTER] = ACTION_TAP_DANCE_DOUBLE(KC_LBRC, KC_ENT),
+};
+
+#define K_TDLBRC TD(TD_LBRC_ENTER)
+
+enum custom_keycodes {
+    K_UML_A = SAFE_RANGE,
+    K_UML_O,
+    K_UML_U,
+    K_UML_S,
+    K_EURO,
+    K_BLE,
+
+    MG_THE,
+    MG_EFORE,
+    MG_UST,
+    MG_ENT,
+    MG_MENT,
+    MG_UEN,
+    MG_ION,
+    MG_ON,
+    MG_TION,
+    MG_ITION,
+    MG_ATIO,
+    MG_ER,
+    MG_ATION,
+};
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [L_GRAPHITE] = LAYOUT_moonlander(
     KC_ESC    , KC_1     , KC_2   , KC_3   , KC_4   , KC_5, KC_MINS,        KC_EQL , KC_6   , KC_7   , KC_8   , KC_9      , KC_0      , KC_GRV    , 
-    KC_DEL    , KC_B     , KC_L   , KC_D   , KC_W   , KC_Z, KC_LBRC,        KC_RBRC, KC_QUOT, KC_F   , KC_O   , KC_U      , KC_J      , KC_BSLS   ,
+    KC_DEL    , KC_B     , KC_L   , KC_D   , KC_W   , KC_Z, K_TDLBRC,       KC_RBRC, KC_QUOT, KC_F   , KC_O   , KC_U      , KC_J      , KC_BSLS   ,
     K_DEL_WORD, KC_N     , KC_R   , KC_T   , KC_S   , KC_G, K_L_UML,        K_BLE  , KC_Y   , KC_H   , KC_A   , KC_E      , KC_I      , K_GUI_SCLN, 
     KC_TAB    , K_CTL_Q  , KC_X   , KC_M   , KC_C   , KC_V,                          KC_K   , KC_P   , KC_COMM, KC_DOT    , K_CTL_SLSH, K_L_MED   , 
     K_L_SYM   , K_CTL_OSM, K_L_NUM, KC_LEFT, KC_RGHT,       K_ALTSPC,       K_SRNSHT,         KC_UP  , KC_DOWN, KC_LBRC   , KC_RBRC   , K_L_SYM   ,
-                                           K_MAGIC, KC_BSPC, KC_LGUI,       KC_TAB  , K_ENT , KC_SPC
+                                           K_MAGIC, KC_BSPC, KC_LGUI,       KC_TAB, K_ENT, KC_SPC
   ),
 
   [L_QWERTY] = LAYOUT_moonlander(
@@ -78,11 +110,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [L_SYMBOL] = LAYOUT_moonlander(
-    _______, KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  , _______,        _______, KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , KC_F11 ,
-    _______, KC_EXLM, KC_AT  , KC_LCBR, KC_RCBR, KC_BSLS, _______,        _______, _______, KC_EQL , _______, _______, _______, KC_F12 , 
-    _______, KC_HASH, KC_DLR , KC_LPRN, KC_RPRN, KC_GRV , _______,        _______, KC_UNDS, KC_MINS, KC_PLUS, KC_ASTR, KC_SCLN, KC_QUOT, 
-    _______, _______, KC_CIRC, KC_LBRC, KC_RBRC, KC_TILD,                          _______, _______, _______, _______, KC_BSLS, _______,
-    _______, KC_COMM, _______, KC_HOME, KC_END ,          _______,        _______,          KC_PGUP, KC_PGDN, _______, _______, _______, 
+    _______, KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  , _______,        _______, KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , KC_F11  ,
+    _______, KC_EXLM, KC_AT  , KC_LCBR, KC_RCBR, KC_BSLS, _______,        _______, _______, KC_EQL , KC_DQUO, KC_QUOT, _______, KC_F12  , 
+    _______, KC_HASH, KC_DLR , KC_LPRN, KC_RPRN, KC_GRV , _______,        _______, KC_UNDS, KC_MINS, KC_PLUS, KC_ASTR, KC_SCLN, KC_COLON, 
+    _______, _______, KC_CIRC, KC_LBRC, KC_RBRC, KC_TILD,                          _______, _______, _______, _______, KC_BSLS, _______ ,
+    _______, KC_COMM, _______, KC_HOME, KC_END ,          _______,        _______,          KC_PGUP, KC_PGDN, _______, _______, _______ , 
                                   _______, LCTL(KC_BSPC), KC_LGUI,        _______, _______, _______
   ),
 
@@ -106,13 +138,18 @@ void keyboard_post_init_user(void) {
 // clang-format off
 uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
     switch (keycode) {
-        case KC_B: return MG_EFORE;
+        case KC_A: return MG_TION;
+        case KC_B: return MG_EFORE; 
+        case KC_C: return MG_TION;
+        case KC_D: return MG_ITION;
         case KC_E: return KC_U;
         case KC_F: return KC_Y;
         case KC_G: return KC_S;
         case KC_H: return KC_Y;
         case KC_I: return MG_ON;
         case KC_J: return MG_UST;
+        //case KC_K: return 
+        case KC_L: return MG_ATIO;
         case KC_M: return MG_ENT;
         case KC_N: return MG_ION;
         case KC_O: return KC_A;
@@ -122,8 +159,11 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
         case KC_S: return KC_C;
         case KC_T: return MG_MENT;
         case KC_U: return KC_E;
+        case KC_V: return MG_ER;
         case KC_W: return KC_S;
+        //case KC_X: return 
         case KC_Y: return KC_QUOT;
+        case KC_Z: return MG_ATION;
     }
 
     return MG_THE;
@@ -154,6 +194,16 @@ bool process_record_magic(uint16_t keycode, keyrecord_t *record) {
             SEND_MAGIC("uen");
         case MG_ON:
             SEND_MAGIC("on");
+        case MG_TION:
+            SEND_MAGIC("tion");
+        case MG_ITION:
+            SEND_MAGIC("ition");
+        case MG_ATIO:
+            SEND_MAGIC("atio");
+        case MG_ER:
+            SEND_MAGIC("er");
+        case MG_ATION:
+            SEND_MAGIC("ation");
     }
 
     return true;
