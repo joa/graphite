@@ -37,7 +37,7 @@ The following magic combos are implemented:
 | `h⋆`   | `hy`     |
 | `i⋆`   | `ion`    |
 | `j⋆`   | `just`   |
-| `l⋆`   | `latio`  |
+| `l⋆`   | `lation` |
 | `m⋆`   | `ment`   |
 | `n⋆`   | `nion`   |
 | `o⋆`   | `oa`     |
@@ -54,3 +54,5 @@ The following magic combos are implemented:
 | ` ⋆`   | ` the`   |
 
 If you press `o` for example and then `⋆` you'll get `oa` as a result. Normally you'd have to do some acrobatics or press first `o` with your right middle-finger and then `a` with the same finger (hence the term SFB or same-finger-bigram). If you were to type a word like `adjustment` you can simply type `adj⋆m⋆` instead 🤯. `mention` becomes `m⋆i⋆` and so on.
+
+The `words.txt` file can be used for training.

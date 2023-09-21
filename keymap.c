@@ -28,7 +28,6 @@
 #define K_ENT LT(L_SYMBOL, KC_ENT)
 #define K_MAGIC LSFT_T(QK_AREP)
 
-
 enum tap_dance {
     TD_LBRC_ENTER,
 };
@@ -57,7 +56,6 @@ enum custom_keycodes {
     MG_ON,
     MG_TION,
     MG_ITION,
-    MG_ATIO,
     MG_ER,
     MG_ATION,
 };
@@ -149,12 +147,13 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
         case KC_I: return MG_ON;
         case KC_J: return MG_UST;
         //case KC_K: return 
-        case KC_L: return MG_ATIO;
+        case KC_L: return MG_ATION;
         case KC_M: return MG_ENT;
         case KC_N: return MG_ION;
         case KC_O: return KC_A;
         case KC_P: return KC_H;
-        case KC_Q: return MG_UEN;
+        case KC_Q: 
+        case K_CTL_Q: return MG_UEN;
         case KC_R: return KC_L;
         case KC_S: return KC_C;
         case KC_T: return MG_MENT;
@@ -164,9 +163,14 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
         //case KC_X: return 
         case KC_Y: return KC_QUOT;
         case KC_Z: return MG_ATION;
+        case KC_SPC:
+        case KC_ENT:
+        case KC_TAB:
+        case KC_DOT:
+        case KC_SCLN: return MG_THE;
     }
 
-    return MG_THE;
+    return KC_TRNS;
 }
 // clang-format on
 
@@ -198,8 +202,6 @@ bool process_record_magic(uint16_t keycode, keyrecord_t *record) {
             SEND_MAGIC("tion");
         case MG_ITION:
             SEND_MAGIC("ition");
-        case MG_ATIO:
-            SEND_MAGIC("atio");
         case MG_ER:
             SEND_MAGIC("er");
         case MG_ATION:
@@ -220,7 +222,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     mod_state = get_mods();
     switch (keycode) {
         case K_MAGIC:
-            if (record->tap.count && record->event.pressed) {
+            if (record->tap.count == 1 && record->event.pressed) {
                 // can't send the quantuum key so we do this manually
                 if (get_repeat_key_count()) {
                     return true;
@@ -243,7 +245,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
                 // windows compatible shifted german umlaut handling
                 // must enable numlock for this to work
-                if (mod_state & MOD_MASK_SHIFT) {
+                if (release_lsft || (mod_state & MOD_MASK_SHIFT)) {
                     del_mods(MOD_MASK_SHIFT);
                     SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_9) SS_TAP(X_KP_6)));
                     set_mods(mod_state);
@@ -254,7 +256,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
         case K_UML_O:
             if (record->event.pressed) {
-                if (mod_state & MOD_MASK_SHIFT) {
+                if (release_lsft || (mod_state & MOD_MASK_SHIFT)) {
                     del_mods(MOD_MASK_SHIFT);
                     SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_2) SS_TAP(X_KP_1) SS_TAP(X_KP_4)));
                     set_mods(mod_state);
@@ -265,7 +267,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
         case K_UML_U:
             if (record->event.pressed) {
-                if (mod_state & MOD_MASK_SHIFT) {
+                if (release_lsft || (mod_state & MOD_MASK_SHIFT)) {
                     del_mods(MOD_MASK_SHIFT);
                     SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_2) SS_TAP(X_KP_2) SS_TAP(X_KP_0)));
                     set_mods(mod_state);
@@ -276,7 +278,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
         case K_UML_S:
             if (record->event.pressed) {
-                bool is_shift = mod_state & MOD_MASK_SHIFT;
+                bool is_shift = release_lsft || (mod_state & MOD_MASK_SHIFT);
                 if (is_shift) {
                     del_mods(MOD_MASK_SHIFT);
                 }
@@ -288,7 +290,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
         case K_EURO:
             if (record->event.pressed) {
-                bool is_shift = mod_state & MOD_MASK_SHIFT;
+                bool is_shift = release_lsft || (mod_state & MOD_MASK_SHIFT);
                 if (is_shift) {
                     del_mods(MOD_MASK_SHIFT);
                 }
