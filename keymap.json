@@ -42,7 +42,7 @@
       "KC_S",
       "KC_G",
       "OSL(3)",
-      "KC_NO",
+      "KC_LGUI",
       "KC_Y",
       "KC_H",
       "KC_A",
@@ -73,12 +73,12 @@
       "KC_LBRC",
       "KC_RBRC",
       "MO(5)",
-      "LSFT_T(QK_AREP)",
+      "ANY(LSFT_T(QK_AREP))",
       "KC_BSPC",
       "KC_LGUI",
       "KC_TAB",
-      "LT(5,KC_ENT)",
-      "KC_SPC"
+      "KC_ENT",
+      "LT(5,KC_SPC)"
     ],
     [
       "KC_TRNS",

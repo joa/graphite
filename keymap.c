@@ -373,3 +373,12 @@ void housekeeping_task_user(void) {
         layer_move(L_GAMING);
     }
 }
+
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case K_SPC:
+            return TAPPING_TERM + 100;
+        default:
+            return TAPPING_TERM;
+    }
+}
