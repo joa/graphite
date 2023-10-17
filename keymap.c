@@ -1,5 +1,6 @@
 #include QMK_KEYBOARD_H
 #include "version.h"
+#include "os_detection.h"
 
 #define L_GRAPHITE 0
 #define L_QWERTY 1
@@ -11,7 +12,7 @@
 
 #define K_DEL_WORD LCTL(KC_BSPC)
 #define K_L_MED TT(L_MEDIA)
-#define K_L_SYM MO(L_SYMBOL)
+#define K_L_SYM TT(L_SYMBOL)
 #define K_L_NUM TT(L_NUMPAD)
 #define K_L_UML OSL(L_UMLAUT)
 #define K_L_GRA TO(L_GRAPHITE)
@@ -24,8 +25,7 @@
 #define K_GUI_SCLN LGUI_T(KC_SCLN)
 #define K_GUI_QUOT LGUI_T(KC_QUOT)
 #define K_ALTSPC LALT_T(KC_SPC)
-#define K_SRNSHT SGUI(KC_S)
-#define K_SPC LT(L_SYMBOL, KC_SPC)
+#define K_ENT LT(L_SYMBOL, KC_ENT)
 #define K_MAGIC LSFT_T(QK_AREP)
 
 enum tap_dance {
@@ -45,6 +45,7 @@ enum custom_keycodes {
     K_UML_S,
     K_EURO,
     K_BLE,
+    K_SRNSHT,
 
     MG_THE,
     MG_EFORE,
@@ -68,7 +69,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     K_DEL_WORD, KC_N     , KC_R   , KC_T   , KC_S   , KC_G, K_L_UML,        K_BLE  , KC_Y   , KC_H   , KC_A   , KC_E      , KC_I      , K_GUI_SCLN, 
     KC_TAB    , K_CTL_Q  , KC_X   , KC_M   , KC_C   , KC_V,                          KC_K   , KC_P   , KC_COMM, KC_DOT    , K_CTL_SLSH, K_L_MED   , 
     K_L_SYM   , K_CTL_OSM, K_L_NUM, KC_LEFT, KC_RGHT,       K_ALTSPC,       K_SRNSHT,         KC_UP  , KC_DOWN, KC_LBRC   , KC_RBRC   , K_L_SYM   ,
-                                           K_MAGIC, KC_BSPC, KC_LGUI,       KC_TAB, KC_ENT, K_SPC
+                                           K_MAGIC, KC_BSPC, KC_LGUI,       KC_TAB, K_ENT, KC_SPC
   ),
 
   [L_QWERTY] = LAYOUT_moonlander(
@@ -84,13 +85,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     AU_TOGG, _______, _______, _______, _______, _______, _______,         _______, _______, _______, _______, _______, _______, QK_BOOT,
     MU_TOGG, _______, KC_BTN1, KC_MS_U, KC_BTN2, _______, _______,         _______, _______, _______, _______, KC_UP  , _______, _______, 
     MU_NEXT, KC_WH_U, KC_MS_L, KC_MS_D, KC_MS_R, _______, _______,         _______, _______, _______, KC_LEFT, KC_DOWN, KC_RGHT, _______,
-    _______, KC_WH_D, _______, _______, _______, _______,                           _______, _______, KC_MRWD, KC_MFFD, _______, XXXXXXX, 
+    _______, KC_WH_D, _______, _______, _______, _______,                           _______, _______, KC_MRWD, KC_MFFD, _______, _______, 
     _______, _______, _______, _______, _______,          _______,         _______,          KC_VOLU, KC_VOLD, KC_MUTE, _______, _______,
                                         _______, KC_WBAK, _______,         _______, _______, KC_MPLY
   ),
 
   [L_UMLAUT] = LAYOUT_moonlander(
-    _______, _______, _______, _______, _______, _______, K_L_GAM,        _______, _______, _______, _______, _______, _______, _______,
+    _______, _______, _______, _______, _______, _______, K_L_GAM,        CG_TOGG, _______, _______, _______, _______, _______, _______,
     _______, _______, _______, K_EURO , _______, _______, K_L_QWE,        _______, _______, _______, K_UML_O, K_UML_U, _______, _______,
     _______, _______, _______, _______, K_UML_S, _______, K_L_GRA,        _______, _______, _______, K_UML_A, _______, _______, _______,
     _______, _______, _______, _______, _______, _______,                          _______, _______, _______, _______, _______, _______, 
@@ -133,8 +134,8 @@ void keyboard_post_init_user(void) {
     rgb_matrix_enable();
 }
 
-// clang-format off
 uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
+    // clang-format off
     switch (keycode) {
         case KC_A: return MG_TION;
         case KC_B: return MG_EFORE; 
@@ -169,10 +170,10 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
         case KC_DOT:
         case KC_SCLN: return MG_THE;
     }
+    // clang-format on
 
     return KC_TRNS;
 }
-// clang-format on
 
 #define SEND_MAGIC(x)            \
     if (record->event.pressed) { \
@@ -181,32 +182,22 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
     return false;
 
 bool process_record_magic(uint16_t keycode, keyrecord_t *record) {
+    // clang-format off
     switch (keycode) {
-        case MG_THE:
-            SEND_MAGIC("the");
-        case MG_EFORE:
-            SEND_MAGIC("efore");
-        case MG_UST:
-            SEND_MAGIC("ust");
-        case MG_ENT:
-            SEND_MAGIC("ent");
-        case MG_MENT:
-            SEND_MAGIC("ment");
-        case MG_ION:
-            SEND_MAGIC("ion");
-        case MG_UEN:
-            SEND_MAGIC("uen");
-        case MG_ON:
-            SEND_MAGIC("on");
-        case MG_TION:
-            SEND_MAGIC("tion");
-        case MG_ITION:
-            SEND_MAGIC("ition");
-        case MG_ER:
-            SEND_MAGIC("er");
-        case MG_ATION:
-            SEND_MAGIC("ation");
+        case MG_THE: SEND_MAGIC("the");
+        case MG_EFORE: SEND_MAGIC("efore");
+        case MG_UST: SEND_MAGIC("ust");
+        case MG_ENT: SEND_MAGIC("ent");
+        case MG_MENT: SEND_MAGIC("ment");
+        case MG_ION: SEND_MAGIC("ion");
+        case MG_UEN: SEND_MAGIC("uen");
+        case MG_ON: SEND_MAGIC("on");
+        case MG_TION: SEND_MAGIC("tion");
+        case MG_ITION: SEND_MAGIC("ition");
+        case MG_ER: SEND_MAGIC("er");
+        case MG_ATION: SEND_MAGIC("ation");
     }
+    // clang-format on
 
     return true;
 }
@@ -217,6 +208,51 @@ bool remember_last_key_user(uint16_t keycode, keyrecord_t *record, uint8_t *reme
 
 uint8_t mod_state    = 0;
 bool    release_lsft = false;
+
+bool process_screenshot(uint16_t keycode, keyrecord_t *record) {
+    if (!record->event.pressed) {
+        return false;
+    }
+
+    set_mods(mod_state | MOD_MASK_SHIFT);
+
+    switch (detected_host_os()) {
+        case OS_LINUX:
+            SEND_STRING(SS_TAP(X_PSCR));
+            break;
+        case OS_MACOS:
+            SEND_STRING(SS_LGUI(SS_TAP(X_4)));
+            break;
+        default:
+            SEND_STRING(SS_LGUI(SS_TAP(X_S)));
+            break;
+    }
+
+    set_mods(mod_state);
+
+    return false;
+}
+
+#define SEND_MAC_UML(x)                                 \
+    if (release_lsft || (mod_state & MOD_MASK_SHIFT)) { \
+        del_mods(MOD_MASK_SHIFT);                       \
+        SEND_STRING(SS_LALT(SS_TAP(X_U)));              \
+        set_mods(mod_state);                            \
+        SEND_STRING(SS_TAP(x));                         \
+    } else {                                            \
+        SEND_STRING(SS_LALT(SS_TAP(X_U)) SS_TAP(x));    \
+    }
+
+// windows compatible shifted german umlaut handling
+// must enable numlock for this to work
+#define SEND_WIN_UML(lc0, lc1, lc2, uc0, uc1, uc2)                                \
+    if (release_lsft || (mod_state & MOD_MASK_SHIFT)) {                           \
+        del_mods(MOD_MASK_SHIFT);                                                 \
+        SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(lc0) SS_TAP(lc1) SS_TAP(lc2))); \
+        set_mods(mod_state);                                                      \
+    } else {                                                                      \
+        SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(uc0) SS_TAP(uc1) SS_TAP(uc2))); \
+    }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     mod_state = get_mods();
@@ -236,6 +272,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 release_lsft = false;
             }
             return false;
+        case K_SRNSHT:
+            return process_screenshot(keycode, record);
         case K_BLE:
             if (record->event.pressed) {
                 SEND_STRING("ble");
@@ -243,36 +281,37 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
         case K_UML_A:
             if (record->event.pressed) {
-                // windows compatible shifted german umlaut handling
-                // must enable numlock for this to work
-                if (release_lsft || (mod_state & MOD_MASK_SHIFT)) {
-                    del_mods(MOD_MASK_SHIFT);
-                    SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_9) SS_TAP(X_KP_6)));
-                    set_mods(mod_state);
-                } else {
-                    SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_2) SS_TAP(X_KP_2) SS_TAP(X_KP_8)));
+                switch (detected_host_os()) {
+                    case OS_MACOS:
+                        SEND_MAC_UML(X_A);
+                        break;
+                    default:
+                        SEND_WIN_UML(X_KP_1, X_KP_9, X_KP_6, X_KP_2, X_KP_2, X_KP_8);
+                        break;
                 }
             }
             return false;
         case K_UML_O:
             if (record->event.pressed) {
-                if (release_lsft || (mod_state & MOD_MASK_SHIFT)) {
-                    del_mods(MOD_MASK_SHIFT);
-                    SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_2) SS_TAP(X_KP_1) SS_TAP(X_KP_4)));
-                    set_mods(mod_state);
-                } else {
-                    SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_2) SS_TAP(X_KP_4) SS_TAP(X_KP_6)));
+                switch (detected_host_os()) {
+                    case OS_MACOS:
+                        SEND_MAC_UML(X_O);
+                        break;
+                    default:
+                        SEND_WIN_UML(X_KP_2, X_KP_1, X_KP_4, X_KP_2, X_KP_4, X_KP_6);
+                        break;
                 }
             }
             return false;
         case K_UML_U:
             if (record->event.pressed) {
-                if (release_lsft || (mod_state & MOD_MASK_SHIFT)) {
-                    del_mods(MOD_MASK_SHIFT);
-                    SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_2) SS_TAP(X_KP_2) SS_TAP(X_KP_0)));
-                    set_mods(mod_state);
-                } else {
-                    SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_2) SS_TAP(X_KP_5) SS_TAP(X_KP_2)));
+                switch (detected_host_os()) {
+                    case OS_MACOS:
+                        SEND_MAC_UML(X_U);
+                        break;
+                    default:
+                        SEND_WIN_UML(X_KP_2, X_KP_2, X_KP_0, X_KP_2, X_KP_5, X_KP_2);
+                        break;
                 }
             }
             return false;
@@ -282,7 +321,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 if (is_shift) {
                     del_mods(MOD_MASK_SHIFT);
                 }
-                SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_2) SS_TAP(X_KP_2) SS_TAP(X_KP_3)));
+                switch (detected_host_os()) {
+                    case OS_MACOS:
+                        SEND_STRING(SS_LALT(SS_TAP(X_S)));
+                        break;
+                    default:
+                        SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_2) SS_TAP(X_KP_2) SS_TAP(X_KP_3)));
+                        break;
+                }
                 if (is_shift) {
                     set_mods(mod_state);
                 }
@@ -291,12 +337,21 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case K_EURO:
             if (record->event.pressed) {
                 bool is_shift = release_lsft || (mod_state & MOD_MASK_SHIFT);
-                if (is_shift) {
-                    del_mods(MOD_MASK_SHIFT);
-                }
-                SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_2) SS_TAP(X_KP_8)));
-                if (is_shift) {
-                    set_mods(mod_state);
+                switch (detected_host_os()) {
+                    case OS_MACOS:
+                        set_mods(mod_state | MOD_MASK_SHIFT);
+                        SEND_STRING(SS_LALT(SS_TAP(X_2)));
+                        set_mods(mod_state);
+                        break;
+                    default:
+                        if (is_shift) {
+                            del_mods(MOD_MASK_SHIFT);
+                        }
+                        SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_2) SS_TAP(X_KP_8)));
+                        if (is_shift) {
+                            set_mods(mod_state);
+                        }
+                        break;
                 }
             }
             return false;
@@ -309,15 +364,87 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
+// TODO switch to LED_LAYOUT_moonlander
 const uint8_t PROGMEM ledmap[][RGB_MATRIX_LED_COUNT][3] = {
-    [L_MEDIA] = {{0, 245, 245}, {234, 255, 255}, {234, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 255}, {0, 0, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 255}, {131, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {131, 255, 255}, {131, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 255}, {131, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {41, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {131, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {131, 255, 255}, {131, 255, 255}, {234, 255, 255}, {0, 245, 245}, {0, 0, 0}, {0, 0, 0}, {131, 255, 255}, {234, 255, 255}, {234, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {234, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {234, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}},
+    // clang-format off
+    [L_MEDIA] = {
+        {  0, 245, 245}, {234, 255, 255}, {234, 255, 255}, {  0,   0,   0}, {  0,   0,   0},
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0, 255}, {  0,   0, 255}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0, 255}, {131, 255, 255}, {  0,   0,   0}, {  0,   0,   0},
+        {  0,   0,   0}, {131, 255, 255}, {131, 255, 255}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0, 255}, {131, 255, 255}, {  0,   0,   0}, {  0,   0,   0},
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0},
+        
+        { 41, 255, 255}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0},
+        {  0,   0,   0}, {  0,   0,   0}, {131, 255, 255}, {  0,   0,   0}, {  0,   0,   0},
+        {  0,   0,   0}, {131, 255, 255}, {131, 255, 255}, {234, 255, 255}, {  0, 245, 245},
+        {  0,   0,   0}, {  0,   0,   0}, {131, 255, 255}, {234, 255, 255}, {234, 255, 255},
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {234, 255, 255},
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        {234, 255, 255}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}
+        },
 
-    [L_UMLAUT] = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {74, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {219, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {152, 255, 255}, {9, 213, 228}, {128, 255, 137}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {234, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {219, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {219, 255, 255}, {219, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {234, 255, 255}, {234, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}},
+    [L_UMLAUT] = {
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0},
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, { 74, 255, 255}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0},
+        {  0,   0,   0}, {  0,   0,   0}, {219, 255, 255}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        {152, 255, 255}, {  9, 213, 228}, {128, 255, 137}, 
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {234, 255, 255}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {219, 255, 255}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {219, 255, 255}, {219, 255, 255}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {234, 255, 255}, {234, 255, 255}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        { 43, 196, 227}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}},
 
-    [L_GAMING] = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 255}, {0, 0, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}},
+    [L_GAMING] = {
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0, 255}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0, 255}, {  0,   0, 255}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0, 255}, {  0,   0,   0}, {  0,   0,   0},
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}},
 
-    [L_NUMPAD] = {{9, 240, 248}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {236, 213, 228}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {104, 229, 191}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {139, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 2, 108}, {0, 0, 255}, {149, 70, 173}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 255}, {0, 0, 255}, {0, 0, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 255}, {0, 0, 255}, {0, 0, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 255}, {0, 0, 255}, {0, 0, 255}, {0, 0, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {98, 255, 255}, {44, 255, 255}, {149, 255, 255}, {0, 0, 0}},
+    [L_NUMPAD] = {
+        {  9, 240, 248}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0},
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0},
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {236, 213, 228}, {  0,   0,   0},
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {104, 229, 191}, {  0,   0,   0},
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {139, 255, 255},
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   2, 108}, {  0,   0, 255}, {149,  70, 173}, {  0,   0,   0}, 
+        
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0, 255}, {  0,   0, 255}, {  0,   0, 255}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0, 255}, {  0,   0, 255}, {  0,   0, 255}, {  0,   0,   0},
+        {  0,   0,   0}, {  0,   0, 255}, {  0,   0, 255}, {  0,   0, 255}, {  0,   0, 255},
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        {  0,   0,   0}, {  0,   0,   0}, {  0,   0,   0}, 
+        { 98, 255, 255}, { 44, 255, 255}, {149, 255, 255}, {  0,   0,   0}},
 
+    // clang-format on
 };
 
 void set_layer_color(int layer) {
@@ -376,7 +503,7 @@ void housekeeping_task_user(void) {
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case K_SPC:
+        case K_ENT:
             return TAPPING_TERM + 100;
         default:
             return TAPPING_TERM;

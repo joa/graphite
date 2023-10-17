@@ -77,8 +77,8 @@
       "KC_BSPC",
       "KC_LGUI",
       "KC_TAB",
-      "KC_ENT",
-      "LT(5,KC_SPC)"
+      "LT(5,KC_ENT)",
+      "KC_SPC"
     ],
     [
       "KC_TRNS",
@@ -208,7 +208,7 @@
       "KC_MRWD",
       "KC_MFFD",
       "KC_TRNS",
-      "KC_NO",
+      "KC_TRNS",
       "KC_TRNS",
       "KC_TRNS",
       "KC_TRNS",
@@ -236,7 +236,7 @@
       "KC_NO",
       "KC_NO",
       "TO(4)",
-      "KC_NO",
+      "CG_SWAP",
       "KC_NO",
       "KC_NO",
       "KC_NO",

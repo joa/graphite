@@ -8,3 +8,5 @@
 
 #define TAPPING_TERM_PER_KEY
 #define TAPPING_TERM 130
+
+#define TAPPING_TOGGLE 1
